@@ -12,14 +12,14 @@ class NormalItem:
         self.item = item
 
     def updateQuality(self):
-        self.item.sellIn -= 1
-        degrado = 1 if self.item.sellIn >= 0 else 2
+        self.item.sellIn = max(0, self.item.sellIn - 1)
+        degrado = 1 if self.item.sellIn > 0 else 2
         self.item.quality = max(0, self.item.quality - degrado)
 
 class AgedBrie(NormalItem):
     def updateQuality(self):
-        self.item.sellIn -= 1
-        aumento = 1 if self.item.sellIn >= 0 else 2
+        self.item.sellIn = max(0, self.item.sellIn - 1)
+        aumento = 1 if self.item.sellIn > 0 else 2
         self.item.quality = min(50, self.item.quality + aumento)
 
 class Sulfuras(NormalItem):
@@ -27,9 +27,9 @@ class Sulfuras(NormalItem):
         pass
 
 class Backstage(NormalItem):
-    def update(self):
-        self.item.sellIn -= 1
-        if self.item.sellIn < 0:
+    def updateQuality(self):
+        self.item.sellIn = max(0, self.item.sellIn - 1)
+        if self.item.sellIn == 0:
             self.item.quality = 0
         elif self.item.sellIn < 5:
             self.item.quality = min(50, self.item.quality + 3)
@@ -39,9 +39,9 @@ class Backstage(NormalItem):
             self.item.quality = min(50, self.item.quality + 1)
 
 class Conjured(NormalItem):
-    def update(self):
-        self.item.sellIn -= 1
-        degrado = 2 if self.item.sellIn >= 0 else 4
+    def updateQuality(self):
+        self.item.sellIn = max(0, self.item.sellIn - 1)
+        degrado = 2 if self.item.sellIn > 0 else 4
         self.item.quality = max(0, self.item.quality - degrado)
 
 class OllivandersShop(object):
