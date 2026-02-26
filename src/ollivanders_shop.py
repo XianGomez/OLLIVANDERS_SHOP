@@ -38,6 +38,12 @@ class Backstage(NormalItem):
         else:
             self.item.quality = min(50, self.item.quality + 1)
 
+class Conjured(NormalItem):
+    def update(self):
+        self.item.sellIn -= 1
+        degrado = 2 if self.item.sellIn >= 0 else 4
+        self.item.quality = max(0, self.item.quality - degrado)
+
 class OllivandersShop(object):
     def __init__(self, items):
         self.items = items
@@ -47,6 +53,7 @@ class OllivandersShop(object):
             "Aged Brie": AgedBrie,
             "Sulfuras, Hand of Ragnaros": Sulfuras,
             "Backstage passes to a TAFKAL80ETC concert": Backstage,
+            "Conjured Mana Cake": Conjured
         }
 
         clase_logica = mapeo.get(item.name, NormalItem)
