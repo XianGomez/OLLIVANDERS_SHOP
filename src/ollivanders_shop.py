@@ -1,7 +1,7 @@
 class Item:
-    def __init__(self, name, sell_in, quality):
+    def __init__(self, name, sellIn, quality):
         self.name = name
-        self.sellIn = sell_in
+        self.sellIn = sellIn
         self.quality = quality
 
     def __repr__(self):
@@ -28,12 +28,31 @@ class Sulfuras(NormalItem):
 
 class Backstage(NormalItem):
     def update(self):
-        self.item.sell_in -= 1
-        if self.item.sell_in < 0:
+        self.item.sellIn -= 1
+        if self.item.sellIn < 0:
             self.item.quality = 0
-        elif self.item.sell_in < 5:
+        elif self.item.sellIn < 5:
             self.item.quality = min(50, self.item.quality + 3)
-        elif self.item.sell_in < 10:
+        elif self.item.sellIn < 10:
             self.item.quality = min(50, self.item.quality + 2)
         else:
             self.item.quality = min(50, self.item.quality + 1)
+
+class OllivandersShop(object):
+    def __init__(self, items):
+        self.items = items
+
+    def _get_logic(self, item):
+        mapeo = {
+            "Aged Brie": AgedBrie,
+            "Sulfuras, Hand of Ragnaros": Sulfuras,
+            "Backstage passes to a TAFKAL80ETC concert": Backstage,
+        }
+
+        clase_logica = mapeo.get(item.name, NormalItem)
+        return clase_logica(item)
+
+    def updateQuality(self):
+        for item in self.items:
+            logic = self._get_logic(item)
+            logic.updateQuality()
